@@ -8,7 +8,7 @@ export default function Home() {
   const [joined, setJoined] = useState(false)
   const [messages, setMessages]: any = useState([])
   const [message, setMessage] = useState("")
-  const [sender, setSender] = useState("")
+  const [notify, setNotify] = useState("")
 
   const handelSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,6 +16,9 @@ export default function Home() {
     if (userName.trim() !== "" && roomId.trim() !== "") {
       connectServer.emit("join-room", data);
       setJoined(true);
+      connectServer.on('user-joined', (note) => {
+        setMessages((prev: any) => [...prev, { sender: note, message }])
+      })
     }
   }
 
@@ -30,10 +33,6 @@ export default function Home() {
     connectServer.on('message', (data) => {
       setMessages((prev: any) => [...prev, data])
     });
-
-    connectServer.on('user-joined', (message) => {
-      setMessages((prev: any) => [...prev, { message }])
-    })
 
     return () => {
       connectServer.off("user_joined");
@@ -55,9 +54,10 @@ export default function Home() {
         </form> : (
           <div>
             <div className="w-[500px] h-[500px] border bg-neutral-700 border-neutral-500 rounded-md px-4 py-4 overflow-y-auto">
+              <div>{notify}</div>
               <div>{messages.map(({ message, sender }: any) => {
                 return (<div className="bg-white w-fit px-4 py-1 rounded my-2" key={Math.random() * 10000 + 1}>
-                  <h1 className="text-blue-500 text-base uppercase">{sender}</h1>
+                  <h1 className={`text-blue-500 text-base uppercase`}>{sender}</h1>
                   <p>{message}</p>
                 </div>
                 )

@@ -21,7 +21,7 @@ io.on('connection', (socket) => {
         // Join the room coming from the frontend
         socket.join(roomId);
         console.log(`User ${userName}.SocketID :${socket.id} joined room with roomId ${roomId}`)
-        socket.to(roomId).emit("join-room", `${userName} joined room ${roomId}`)
+        socket.to(roomId).emit('user-joined', `${userName} joined the room ${roomId}`)
     })
 
     socket.on('message', ({ roomId, message, sender }) => {
