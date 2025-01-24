@@ -6,7 +6,7 @@ const app = express();
 
 const server = http.createServer(app);
 const PORT = 3001;
-const HOSTNAME = "localhost";
+const HOSTNAME = "https://express-next-chat-backend.vercel.app/";
 
 
 const io = new Server(server, {
